@@ -1,6 +1,0 @@
-CREATE SCHEMA pokequeue;
-
-CREATE TABLE pokequeue.MESSAGES(
-    id int IDENTITY(1,1) PRIMARY KEY,
-    [message] VARCHAR(255) NOT NULL,
-)

@@ -1,1 +1,0 @@
-INSERT INTO pokequeue.MESSAGES ([message]) VALUES ('POKE QUEUE REQUEST')
