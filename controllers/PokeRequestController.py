@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from models.PokeRequest import PokeRequest
 from utils.database import execute_query_json
 from utils.AQueue import AQueue
+from utils.ABlob import ABlob
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,3 +48,24 @@ async def insert_poke_request(poke_request: PokeRequest) -> dict:
     except Exception as e:
         logger.error(f"Error Inserting report request {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+async def get_all_request() -> dict:
+    query = """
+        SELECT
+            r.id as ReportId
+            , s.description as Status
+            , r.type as PokemonType
+            , r.url
+            , r.created
+            , r.updated
+        FROM pokequeue.requests r
+        INNER JOIN pokequeue.status s
+        ON r.id_status = s.id
+    """
+    result = await execute_query_json (query)
+    result_dict = json.loads(result)
+    blob = ABlob()
+    for record in result_dict:
+        id = record['ReportId']
+        record['url'] = f"{record['url']}?{blob.generate_sas(id)}"
+    return result_dict
