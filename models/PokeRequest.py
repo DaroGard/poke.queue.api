@@ -25,3 +25,9 @@ class PokeRequest(BaseModel):
         description="Request Status",
         pattern="^(sent|completed|failed|inprogress)$"
     )
+
+    #Tarea 3: Actualiza el modelo Pydantic (opcional, gt=0 ).
+    sample_size: Optional[int] = Field(
+        default=None, 
+        gt=0
+    )
